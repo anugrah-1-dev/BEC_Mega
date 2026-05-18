@@ -570,6 +570,14 @@ class AdmissionController extends Controller
             'status' => 'pending'
         ]);
 
+        if ($request->ajax() || $request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Registrasi berhasil!',
+                'redirect' => route('checkout.index'),
+            ]);
+        }
+
         return redirect()->route('checkout.index')->with('success', 'Registrasi berhasil! Silakan selesaikan pembayaran.');
     }
 

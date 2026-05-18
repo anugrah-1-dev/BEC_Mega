@@ -27,8 +27,8 @@ Route::post('/logout', [AdmissionController::class, 'logout'])->name('logout');
 // =======================
 // REGISTER DENGAN POS (GUEST ACCESSIBLE)
 // =======================
-Route::get('/register-pos', [AdmissionController::class, 'showRegisterPOS'])->name('register.pos');
-Route::post('/register-pos', [AdmissionController::class, 'processRegisterPOS'])->name('register.pos.process');
+Route::get('/daftar', [AdmissionController::class, 'showRegisterPOS'])->name('register.pos');
+Route::post('/daftar', [AdmissionController::class, 'processRegisterPOS'])->name('register.pos.process');
 
 // =======================
 // USER (STUDENT FLOW)

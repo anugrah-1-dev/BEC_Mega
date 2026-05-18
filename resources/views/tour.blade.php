@@ -1971,7 +1971,7 @@
                 </button>
             </div>
             <div class="footer-right">
-                <a href="{{ route('register.pos') }}" class="btn-footer" id="btn-open-registration" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <a href="#" onclick="openRegModal(); return false;" class="btn-footer" id="btn-open-registration" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <svg style="width:22px;height:22px" viewBox="0 0 24 24"><path fill="currentColor" d="M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M6,10V7H4V10H1V12H4V15H6V12H9V10M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12Z" /></svg>
                     DAFTAR SEKARANG (POS)
                 </a>
@@ -2283,7 +2283,7 @@
                                 </div>
 
                                 <div style="display: flex; justify-content: center; gap: 20px;">
-                                    <a href="{{ route('register.pos') }}" class="btn-portal-primary" style="width: auto; padding: 18px 60px; font-size: 1.125rem; text-decoration:none;">
+                                    <a href="#" onclick="switchRegTab('tab-registration'); return false;" class="btn-portal-primary" style="width: auto; padding: 18px 60px; font-size: 1.125rem; text-decoration:none;">
                                         <div style="display:flex; align-items:center; gap:10px;">
                                             <svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="currentColor" d="M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M6,10V7H4V10H1V12H4V15H6V12H9V10M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12Z" /></svg>
                                             MASUK KE POS PENDAFTARAN
@@ -2685,7 +2685,13 @@
                                 <p style="color: #64748b; margin-top: 6px;">Pilih program, periode, dan transport untuk mendaftar kursus BEC.</p>
                             </div>
                             <div class="db-card" style="max-width: 640px;">
-                                <form action="{{ route('register.pos.process') }}" method="POST" style="padding: 30px; display: flex; flex-direction: column; gap: 20px;">
+                                <div id="form-reg-success" style="display:none; padding: 30px; text-align: center;">
+                                    <div style="font-size: 3rem;">✅</div>
+                                    <h3 style="color: #1e293b; margin: 16px 0 8px;">Pendaftaran Berhasil!</h3>
+                                    <p style="color: #64748b; margin-bottom: 24px;">Akun kamu telah dibuat. Lanjutkan ke halaman pembayaran.</p>
+                                    <a id="btn-ke-checkout" href="{{ route('checkout.index') }}" style="display:inline-block; padding: 14px 40px; background: linear-gradient(135deg, #003399, #4f46e5); color: white; border-radius: 12px; font-weight: 800; text-decoration: none;">LANJUT KE PEMBAYARAN →</a>
+                                </div>
+                                <form id="form-registrasi" action="{{ route('register.pos.process') }}" method="POST" style="padding: 30px; display: flex; flex-direction: column; gap: 20px;">
                                     @csrf
                                     <div>
                                         <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Nama Lengkap</label>
@@ -2736,9 +2742,10 @@
                                         </select>
                                     </div>
                                     <button type="submit"
-                                        style="width: 100%; padding: 14px; background: linear-gradient(135deg, #003399, #4f46e5); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; letter-spacing: 0.5px;">
+                                        style="width: 100%; padding: 14px; background: linear-gradient(135deg, #003399, #4f46e5); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; letter-spacing: 0.5px;" id="btn-submit-daftar">
                                         DAFTAR SEKARANG →
                                     </button>
+                                    <div id="form-reg-error" style="display:none; padding: 12px 16px; background: #fee2e2; border-radius: 8px; color: #dc2626; font-size: 0.9rem;"></div>
                                 </form>
                             </div>
                         </div>
@@ -2748,6 +2755,54 @@
             </div> <!-- end portal interface -->
         </div> <!-- end registration box -->
     </div> <!-- end registration modal overlay -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const formReg = document.getElementById('form-registrasi');
+            if (formReg) {
+                formReg.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const btn = document.getElementById('btn-submit-daftar');
+                    const errBox = document.getElementById('form-reg-error');
+                    btn.disabled = true;
+                    btn.textContent = 'Memproses...';
+                    errBox.style.display = 'none';
+
+                    const formData = new FormData(formReg);
+                    fetch(formReg.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                        },
+                        body: formData,
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            formReg.style.display = 'none';
+                            document.getElementById('form-reg-success').style.display = 'block';
+                            if (data.redirect) {
+                                document.getElementById('btn-ke-checkout').href = data.redirect;
+                            }
+                        } else {
+                            errBox.textContent = data.message || 'Terjadi kesalahan. Silakan coba lagi.';
+                            errBox.style.display = 'block';
+                            btn.disabled = false;
+                            btn.textContent = 'DAFTAR SEKARANG →';
+                        }
+                    })
+                    .catch(err => {
+                        errBox.textContent = 'Koneksi gagal. Silakan coba lagi.';
+                        errBox.style.display = 'block';
+                        btn.disabled = false;
+                        btn.textContent = 'DAFTAR SEKARANG →';
+                    });
+                });
+            }
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/marzipano@0.10.2/dist/marzipano.js"></script>
     <script>
