@@ -20,8 +20,8 @@ class TourController extends Controller
         $newRegistrations = Registration::with(['user', 'course', 'period', 'comments.user'])->latest()->take(15)->get();
         
         // Additional data for the comprehensive UI
-        $banks = DB::table('banks')->where('status', 'active')->get();
-        $courseFeatures = DB::table('course_features')->where('status', 'active')->get()->groupBy('course_id');
+        $banks = DB::table('banks')->get();
+        $courseFeatures = DB::table('course_features')->get()->groupBy('course_id');
         $payments = DB::table('payments')
             ->join('students', 'payments.student_id', '=', 'students.id')
             ->select('payments.*', 'students.fullname as student_name')
