@@ -2862,20 +2862,23 @@
                                     <div style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 8px; margin-top: 4px;">
                                         <span style="font-size: 0.8rem; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: 1px;">Tambahan Layanan</span>
                                     </div>
-                                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #374151;">
-                                            <input type="checkbox" name="has_catering" value="1" style="width: 16px; height: 16px; accent-color: #4f46e5;">
-                                            🍽️ Catering
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #374151;">
-                                            <input type="checkbox" name="has_laundry" value="1" style="width: 16px; height: 16px; accent-color: #4f46e5;">
-                                            👕 Laundry
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #374151;">
-                                            <input type="checkbox" name="has_holiday" value="1" style="width: 16px; height: 16px; accent-color: #4f46e5;">
-                                            🏖️ Holiday Program
-                                        </label>
+                                    @if(isset($additionalServices) && $additionalServices->isNotEmpty())
+                                    <div>
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Pilih Layanan Tambahan <span style="font-size:0.8rem; font-weight:400; color:#94a3b8;">(Opsional)</span></label>
+                                        <select name="additional_service_id"
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white; box-sizing: border-box;">
+                                            <option value="">-- Tidak Ada --</option>
+                                            @foreach($additionalServices as $service)
+                                            <option value="{{ $service->id }}">
+                                                {{ $service->name }}{{ $service->price > 0 ? ' (+Rp '.number_format($service->price, 0, ',', '.').')' : ' (Gratis)' }}
+                                            </option>
+                                            @endforeach
+                                        </select>
                                     </div>
+                                    @else
+                                    <p style="color:#94a3b8; font-size:0.85rem; margin:0;">Belum ada layanan tambahan tersedia.</p>
+                                    <input type="hidden" name="additional_service_id" value="">
+                                    @endif
 
                                     <button type="submit"
                                         style="width: 100%; padding: 14px; background: linear-gradient(135deg, #003399, #4f46e5); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; letter-spacing: 0.5px;" id="btn-submit-daftar">

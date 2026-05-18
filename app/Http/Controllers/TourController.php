@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\AdditionalService;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\Registration;
@@ -19,6 +20,7 @@ class TourController extends Controller
         $newRegistrations = Registration::with(['user', 'course', 'period', 'comments.user'])->latest()->take(15)->get();
         $periods = DB::table('periods')->latest()->take(12)->get();
         $transports = DB::table('transports')->get();
+        $additionalServices = AdditionalService::where('is_active', true)->orderBy('name')->get();
         $users = User::latest()->take(5)->get();
 
         // Tables that may not exist yet — wrapped safely
@@ -61,7 +63,8 @@ class TourController extends Controller
             'courseFeatures', 
             'payments', 
             'periods', 
-            'transports', 
+            'transports',
+            'additionalServices',
             'permits', 
             'users'
         ));

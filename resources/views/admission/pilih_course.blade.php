@@ -168,24 +168,19 @@
                 <div style="font-size:0.78rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:14px;">
                     Tambahan Layanan <span style="font-weight:400; text-transform:none; font-size:0.75rem; color:#94a3b8;">(Opsional)</span>
                 </div>
-                <div style="display:flex; flex-wrap:wrap; gap:12px;">
-                    @foreach([
-                        ['has_catering', 'Catering', '🍽️'],
-                        ['has_laundry',  'Laundry',  '👕'],
-                        ['has_holiday',  'Holiday',  '🏖️'],
-                    ] as [$field, $label, $icon])
-                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;
-                        padding:14px 22px; border:1.5px solid #e2e8f0; border-radius:10px;
-                        background:#fafafa; transition:all 0.2s;"
-                        onclick="this.style.borderColor=this.querySelector('input').checked?'#e2e8f0':'#363d72';
-                                 this.style.background=this.querySelector('input').checked?'#fafafa':'rgba(54,61,114,0.06)';">
-                        <input type="checkbox" name="{{ $field }}" value="1"
-                               style="accent-color:#363d72; width:16px; height:16px;"
-                               onchange="calculateTotal()">
-                        <span style="font-size:0.875rem; font-weight:600; color:#0f172a;">{{ $icon }} {{ $label }}</span>
-                    </label>
+                @if(isset($additionalServices) && $additionalServices->isNotEmpty())
+                <select name="additional_service_id" id="additional_service_id" style="max-width:400px; padding:12px 16px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:0.9rem; font-family:inherit; background:white; width:100%;" onchange="calculateTotal()">
+                    <option value="" data-price="0">-- Tidak Ada --</option>
+                    @foreach($additionalServices as $service)
+                    <option value="{{ $service->id }}" data-price="{{ $service->price }}">
+                        {{ $service->name }}{{ $service->price > 0 ? ' (+Rp '.number_format($service->price, 0, ',', '.').')' : ' (Gratis)' }}
+                    </option>
                     @endforeach
-                </div>
+                </select>
+                @else
+                <p style="color:#94a3b8; font-size:0.875rem;">Belum ada layanan tambahan tersedia.</p>
+                <input type="hidden" name="additional_service_id" value="">
+                @endif
             </div>
 
             {{-- Transport --}}
@@ -245,6 +240,13 @@ function calculateTotal() {
         if (transportSelected && transportPrices[transportSelected]) {
             total += parseFloat(transportPrices[transportSelected]);
         }
+    }
+
+    const serviceSelect = document.getElementById('additional_service_id');
+    if (serviceSelect && serviceSelect.value) {
+        const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+        const servicePrice = parseFloat(selectedOption.getAttribute('data-price') || 0);
+        total += servicePrice;
     }
 
     if (courseSelected) {

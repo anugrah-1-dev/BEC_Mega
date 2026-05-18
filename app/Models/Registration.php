@@ -14,15 +14,13 @@ class Registration extends Model
         'course_id',
         'period_id',
         'transport_id',
+        'additional_service_id',
         'payment_method',
         'invoice_number',
         'snap_token',
         'payment_proof',
         'status',
         'payment_status',
-        'has_catering',
-        'has_laundry',
-        'has_holiday',
     ];
 
     public function user()

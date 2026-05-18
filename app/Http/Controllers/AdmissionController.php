@@ -8,6 +8,7 @@ use App\Models\Period;
 use App\Models\StudentDetail;
 use App\Models\Registration;
 use App\Models\Transport;
+use App\Models\AdditionalService;
 use App\Models\RegistrationComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -138,28 +139,28 @@ class AdmissionController extends Controller
         $periods = Period::all();
         $transports = Transport::where('status', 'active')->get();
         $features = DB::table('course_features')->where('status', 'active')->get()->groupBy('course_id');
+        $additionalServices = AdditionalService::where('is_active', true)->orderBy('name')->get();
 
-        return view('admission.pilih_course', compact('courses', 'periods', 'features', 'transports'));
+        return view('admission.pilih_course', compact('courses', 'periods', 'features', 'transports', 'additionalServices'));
     }
 
     public function storePilihCourse(Request $request)
     {
         $request->validate([
-            'course_id' => 'required|exists:courses,id',
-            'period_id' => 'required|exists:periods,id',
-            'transport_id' => 'required|exists:transports,id',
+            'course_id'             => 'required|exists:courses,id',
+            'period_id'             => 'required|exists:periods,id',
+            'transport_id'          => 'required|exists:transports,id',
+            'additional_service_id' => 'nullable|exists:additional_services,id',
         ]);
 
         Registration::updateOrCreate(
             ['user_id' => Auth::id(), 'status' => 'pending'],
             [
-                'course_id'    => $request->course_id,
-                'period_id'    => $request->period_id,
-                'transport_id' => $request->transport_id,
-                'has_catering' => $request->boolean('has_catering'),
-                'has_laundry'  => $request->boolean('has_laundry'),
-                'has_holiday'  => $request->boolean('has_holiday'),
-                'payment_status' => 'unpaid',
+                'course_id'             => $request->course_id,
+                'period_id'             => $request->period_id,
+                'transport_id'          => $request->transport_id,
+                'additional_service_id' => $request->additional_service_id ?: null,
+                'payment_status'        => 'unpaid',
             ]
         );
 
@@ -552,10 +553,11 @@ class AdmissionController extends Controller
             'birth_place'    => 'nullable|string|max:100',
             'birth_date'     => 'nullable|date',
             'address'        => 'nullable|string|max:500',
-            'uniform_size'   => 'nullable|in:XS,S,M,L,XL,XXL,XXXL',
-            'course_id'      => 'required|exists:courses,id',
-            'period_id'      => 'required|exists:periods,id',
-            'transport_id'   => 'required|exists:transports,id',
+            'uniform_size'          => 'nullable|in:XS,S,M,L,XL,XXL,XXXL',
+            'course_id'             => 'required|exists:courses,id',
+            'period_id'             => 'required|exists:periods,id',
+            'transport_id'          => 'required|exists:transports,id',
+            'additional_service_id' => 'nullable|exists:additional_services,id',
         ]);
 
         // 1. Semi-login: Cari atau buat akun user
@@ -596,9 +598,7 @@ class AdmissionController extends Controller
             'invoice_number' => $invoice,
             'payment_status' => 'unpaid',
             'status'         => 'pending',
-            'has_catering'   => $request->boolean('has_catering'),
-            'has_laundry'    => $request->boolean('has_laundry'),
-            'has_holiday'    => $request->boolean('has_holiday'),
+            'additional_service_id' => $request->additional_service_id ?: null,
         ]);
 
         if ($request->ajax() || $request->expectsJson()) {
