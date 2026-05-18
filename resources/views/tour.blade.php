@@ -2709,9 +2709,9 @@
                         <div id="tab-registration" class="tab-pane">
                             <div style="margin-bottom: 25px;">
                                 <h2 style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">Formulir Pendaftaran</h2>
-                                <p style="color: #64748b; margin-top: 6px;">Pilih program, periode, dan transport untuk mendaftar kursus BEC.</p>
+                                <p style="color: #64748b; margin-top: 6px;">Isi data diri dan pilih program kursus BEC.</p>
                             </div>
-                            <div class="db-card" style="max-width: 640px;">
+                            <div class="db-card" style="max-width: 680px;">
                                 <div id="form-reg-success" style="display:none; padding: 30px; text-align: center;">
                                     <div style="font-size: 3rem;">✅</div>
                                     <h3 style="color: #1e293b; margin: 16px 0 8px;">Pendaftaran Berhasil!</h3>
@@ -2720,54 +2720,163 @@
                                 </div>
                                 <form id="form-registrasi" action="{{ route('register.pos.process') }}" method="POST" style="padding: 30px; display: flex; flex-direction: column; gap: 20px;">
                                     @csrf
+
+                                    {{-- === DATA DIRI === --}}
+                                    <div style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 8px;">
+                                        <span style="font-size: 0.8rem; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: 1px;">Data Diri</span>
+                                    </div>
+
                                     <div>
-                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Nama Lengkap</label>
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Nama Lengkap <span style="color:#dc2626">*</span></label>
                                         <input type="text" name="name" value="{{ auth()->user()->name ?? '' }}" required
-                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit;"
-                                            placeholder="Nama lengkap Anda">
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; box-sizing: border-box;"
+                                            placeholder="Nama lengkap sesuai KTP">
                                     </div>
-                                    <div>
-                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Email</label>
-                                        <input type="email" name="email" value="{{ auth()->user()->email ?? '' }}" required
-                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit;"
-                                            placeholder="email@contoh.com">
+
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                        <div>
+                                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Email <span style="color:#dc2626">*</span></label>
+                                            <input type="email" name="email" value="{{ auth()->user()->email ?? '' }}" required
+                                                style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; box-sizing: border-box;"
+                                                placeholder="email@contoh.com">
+                                        </div>
+                                        <div>
+                                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">No. HP / WhatsApp <span style="color:#dc2626">*</span></label>
+                                            <input type="text" name="phone" required
+                                                style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; box-sizing: border-box;"
+                                                placeholder="08xxxxxxxxxx">
+                                        </div>
                                     </div>
+
                                     <div>
-                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">No. HP / WhatsApp</label>
-                                        <input type="text" name="phone" required
-                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit;"
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">No. HP Wali / Orang Tua</label>
+                                        <input type="text" name="guardian_phone"
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; box-sizing: border-box;"
                                             placeholder="08xxxxxxxxxx">
                                     </div>
+
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                        <div>
+                                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Jenis Kelamin</label>
+                                            <select name="gender"
+                                                style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white; box-sizing: border-box;">
+                                                <option value="">-- Pilih --</option>
+                                                <option value="Laki-Laki">Laki-Laki</option>
+                                                <option value="Perempuan">Perempuan</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Ukuran Seragam</label>
+                                            <select name="uniform_size"
+                                                style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white; box-sizing: border-box;">
+                                                <option value="">-- Pilih Ukuran --</option>
+                                                <option value="XS">XS</option>
+                                                <option value="S">S</option>
+                                                <option value="M">M</option>
+                                                <option value="L">L</option>
+                                                <option value="XL">XL</option>
+                                                <option value="XXL">XXL</option>
+                                                <option value="XXXL">XXXL</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                        <div>
+                                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Tempat Lahir</label>
+                                            <input type="text" name="birth_place"
+                                                style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; box-sizing: border-box;"
+                                                placeholder="Kota tempat lahir">
+                                        </div>
+                                        <div>
+                                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Tanggal Lahir</label>
+                                            <input type="date" name="birth_date"
+                                                style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; box-sizing: border-box;">
+                                        </div>
+                                    </div>
+
                                     <div>
-                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Pilih Program Kursus</label>
-                                        <select name="course_id" required
-                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white;">
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Alamat Lengkap</label>
+                                        <input type="text" name="address"
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; box-sizing: border-box;"
+                                            placeholder="Alamat domisili saat ini">
+                                    </div>
+
+                                    {{-- === PILIH KURSUS === --}}
+                                    <div style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 8px; margin-top: 4px;">
+                                        <span style="font-size: 0.8rem; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: 1px;">Pilih Kursus</span>
+                                    </div>
+
+                                    {{-- Filter Bahasa --}}
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                        @foreach(['Semua', 'Inggris', 'Jerman', 'Mandarin', 'Arab'] as $lang)
+                                        <button type="button" onclick="filterCoursePOS('{{ $lang }}')"
+                                            id="btn-lang-pos-{{ $lang }}"
+                                            style="padding: 6px 14px; border-radius: 20px; border: 1.5px solid {{ $lang === 'Semua' ? '#4f46e5' : '#e2e8f0' }}; background: {{ $lang === 'Semua' ? '#4f46e5' : 'white' }}; color: {{ $lang === 'Semua' ? 'white' : '#64748b' }}; font-size: 0.82rem; font-weight: 600; cursor: pointer;">
+                                            {{ $lang === 'Inggris' ? '🇬🇧' : ($lang === 'Jerman' ? '🇩🇪' : ($lang === 'Mandarin' ? '🇨🇳' : ($lang === 'Arab' ? '🕌' : '🌐'))) }} {{ $lang }}
+                                        </button>
+                                        @endforeach
+                                    </div>
+
+                                    <div>
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Program Kursus <span style="color:#dc2626">*</span></label>
+                                        <select name="course_id" id="select-course-pos" required
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white; box-sizing: border-box;">
                                             <option value="">-- Pilih Program --</option>
-                                            @foreach($courses as $course)
-                                            <option value="{{ $course->id }}">{{ $course->name }} — Rp {{ number_format($course->price, 0, ',', '.') }}</option>
+                                            @foreach($courses->groupBy('language') as $lang => $langCourses)
+                                            <optgroup label="{{ $lang }}" data-lang="{{ $lang }}">
+                                                @foreach($langCourses as $course)
+                                                <option value="{{ $course->id }}" data-language="{{ $course->language }}">
+                                                    [{{ $course->language }}] {{ $course->name }}{{ $course->duration ? ' · '.$course->duration : '' }} — Rp {{ number_format($course->price, 0, ',', '.') }}
+                                                </option>
+                                                @endforeach
+                                            </optgroup>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div>
-                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Pilih Periode Belajar</label>
-                                        <select name="period_id" required
-                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white;">
-                                            <option value="">-- Pilih Periode --</option>
-                                            @foreach($periods as $period)
-                                            <option value="{{ $period->id }}">{{ $period->name }}</option>
-                                            @endforeach
-                                        </select>
+
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                        <div>
+                                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Periode Belajar <span style="color:#dc2626">*</span></label>
+                                            <select name="period_id" required
+                                                style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white; box-sizing: border-box;">
+                                                <option value="">-- Pilih Periode --</option>
+                                                @foreach($periods as $period)
+                                                <option value="{{ $period->id }}">{{ $period->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Transport <span style="color:#dc2626">*</span></label>
+                                            <select name="transport_id" required
+                                                style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white; box-sizing: border-box;">
+                                                <option value="">-- Pilih Transport --</option>
+                                                @foreach($transports as $transport)
+                                                <option value="{{ $transport->id }}">{{ $transport->name }} — Rp {{ number_format($transport->price, 0, ',', '.') }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Transport</label>
-                                        <select name="transport_id" required
-                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white;">
-                                            <option value="">-- Pilih Transport --</option>
-                                            @foreach($transports as $transport)
-                                            <option value="{{ $transport->id }}">{{ $transport->name }} — Rp {{ number_format($transport->price, 0, ',', '.') }}</option>
-                                            @endforeach
-                                        </select>
+
+                                    {{-- === TAMBAHAN LAYANAN === --}}
+                                    <div style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 8px; margin-top: 4px;">
+                                        <span style="font-size: 0.8rem; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: 1px;">Tambahan Layanan</span>
                                     </div>
+                                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #374151;">
+                                            <input type="checkbox" name="has_catering" value="1" style="width: 16px; height: 16px; accent-color: #4f46e5;">
+                                            🍽️ Catering
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #374151;">
+                                            <input type="checkbox" name="has_laundry" value="1" style="width: 16px; height: 16px; accent-color: #4f46e5;">
+                                            👕 Laundry
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #374151;">
+                                            <input type="checkbox" name="has_holiday" value="1" style="width: 16px; height: 16px; accent-color: #4f46e5;">
+                                            🏖️ Holiday Program
+                                        </label>
+                                    </div>
+
                                     <button type="submit"
                                         style="width: 100%; padding: 14px; background: linear-gradient(135deg, #003399, #4f46e5); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; letter-spacing: 0.5px;" id="btn-submit-daftar">
                                         DAFTAR SEKARANG →
@@ -2784,6 +2893,34 @@
     </div> <!-- end registration modal overlay -->
 
     <script>
+        function filterCoursePOS(lang) {
+            const select = document.getElementById('select-course-pos');
+            if (!select) return;
+            const optgroups = select.querySelectorAll('optgroup');
+            optgroups.forEach(function(og) {
+                og.style.display = (lang === 'Semua' || og.getAttribute('data-lang') === lang) ? '' : 'none';
+            });
+            // Reset selection if current option is hidden
+            const selected = select.options[select.selectedIndex];
+            if (selected && selected.parentElement && selected.parentElement.style.display === 'none') {
+                select.value = '';
+            }
+            // Update button styles
+            ['Semua','Inggris','Jerman','Mandarin','Arab'].forEach(function(l) {
+                const btn = document.getElementById('btn-lang-pos-' + l);
+                if (!btn) return;
+                if (l === lang) {
+                    btn.style.background = '#4f46e5';
+                    btn.style.color = 'white';
+                    btn.style.borderColor = '#4f46e5';
+                } else {
+                    btn.style.background = 'white';
+                    btn.style.color = '#64748b';
+                    btn.style.borderColor = '#e2e8f0';
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const formReg = document.getElementById('form-registrasi');
             if (formReg) {

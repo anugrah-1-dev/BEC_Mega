@@ -52,7 +52,7 @@ class ArabicCourseSeeder extends Seeder
         ];
 
         foreach ($courses as $course) {
-            \App\Models\Course::firstOrCreate(
+            \App\Models\Course::updateOrCreate(
                 ['name' => $course['name']],
                 $course
             );

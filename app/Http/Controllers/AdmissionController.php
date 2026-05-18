@@ -544,29 +544,43 @@ class AdmissionController extends Controller
     public function processRegisterPOS(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'phone' => 'required|string',
-            'course_id' => 'required|exists:courses,id',
-            'period_id' => 'required|exists:periods,id',
-            'transport_id' => 'required|exists:transports,id',
+            'name'           => 'required|string|max:255',
+            'email'          => 'required|string|email|max:255',
+            'phone'          => 'required|string',
+            'guardian_phone' => 'nullable|string|max:20',
+            'gender'         => 'nullable|in:Laki-Laki,Perempuan',
+            'birth_place'    => 'nullable|string|max:100',
+            'birth_date'     => 'nullable|date',
+            'address'        => 'nullable|string|max:500',
+            'uniform_size'   => 'nullable|in:XS,S,M,L,XL,XXL,XXXL',
+            'course_id'      => 'required|exists:courses,id',
+            'period_id'      => 'required|exists:periods,id',
+            'transport_id'   => 'required|exists:transports,id',
         ]);
 
         // 1. Semi-login: Cari atau buat akun user
         $user = User::where('email', $request->email)->first();
         if (!$user) {
             $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
+                'name'     => $request->name,
+                'email'    => $request->email,
                 'password' => Hash::make('password'), // default password untuk semi-login
-                'role' => 'student',
+                'role'     => 'student',
             ]);
         }
 
-        // 2. Simpan detail no HP siswa
+        // 2. Simpan detail siswa
         StudentDetail::updateOrCreate(
             ['user_id' => $user->id],
-            ['phone' => $request->phone, 'address' => 'Belum diisi']
+            [
+                'phone'          => $request->phone,
+                'guardian_phone' => $request->guardian_phone,
+                'gender'         => $request->gender,
+                'birth_place'    => $request->birth_place,
+                'birth_date'     => $request->birth_date,
+                'address'        => $request->filled('address') ? $request->address : 'Belum diisi',
+                'uniform_size'   => $request->uniform_size,
+            ]
         );
 
         // 3. Login otomatis
@@ -575,19 +589,22 @@ class AdmissionController extends Controller
         // 4. Buat data pendaftaran dengan status pending / unpaid
         $invoice = 'INV-' . strtoupper(Str::random(8));
         $registration = Registration::create([
-            'user_id' => $user->id,
-            'course_id' => $request->course_id,
-            'period_id' => $request->period_id,
-            'transport_id' => $request->transport_id,
+            'user_id'        => $user->id,
+            'course_id'      => $request->course_id,
+            'period_id'      => $request->period_id,
+            'transport_id'   => $request->transport_id,
             'invoice_number' => $invoice,
             'payment_status' => 'unpaid',
-            'status' => 'pending'
+            'status'         => 'pending',
+            'has_catering'   => $request->boolean('has_catering'),
+            'has_laundry'    => $request->boolean('has_laundry'),
+            'has_holiday'    => $request->boolean('has_holiday'),
         ]);
 
         if ($request->ajax() || $request->expectsJson()) {
             return response()->json([
-                'success' => true,
-                'message' => 'Registrasi berhasil!',
+                'success'  => true,
+                'message'  => 'Registrasi berhasil!',
                 'redirect' => route('checkout.index'),
             ]);
         }
