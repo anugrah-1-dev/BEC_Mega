@@ -15,7 +15,11 @@ class Course extends Model
     // Kolom yang boleh diisi
     protected $fillable = [
         'name',
+        'language',
+        'type',
+        'duration',
         'price',
+        'admin_tax',
         'description'
     ];
 

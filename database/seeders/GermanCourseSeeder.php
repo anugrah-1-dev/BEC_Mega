@@ -15,47 +15,75 @@ class GermanCourseSeeder extends Seeder
         $courses = [
             // === OFFLINE ===
             [
-                'name'        => 'Program Offline Level A1 (Periode 15)',
-                'price'       => 3500000,
-                'description' => "Bahasa: Jerman | Tipe: Offline | Kategori: A1 | Durasi: 15 Hari\n\nFasilitas:\n- Level Dasar Pemula\n- Pembelajaran dengan Modul Khusus\n- Gratis Camp Reguler\n- Sertifikat",
+                'name'       => 'Program Offline Level A1 (Periode 15)',
+                'language'   => 'Jerman',
+                'type'       => 'Offline',
+                'duration'   => '15 Hari',
+                'price'      => 3500000,
+                'admin_tax'  => 0,
+                'description' => "Fasilitas:\n- Level Dasar Pemula\n- Pembelajaran dengan Modul Khusus\n- Gratis Camp Reguler\n- Sertifikat",
             ],
             [
-                'name'        => 'Program Offline Level A1 (Periode 30)',
-                'price'       => 3500000,
-                'description' => "Bahasa: Jerman | Tipe: Offline | Kategori: A1 | Durasi: 30 Hari\n\nFasilitas:\n- Level Dasar Pemula\n- Pembelajaran dengan Modul Khusus\n- Gratis Camp Reguler\n- Sertifikat",
+                'name'       => 'Program Offline Level A1 (Periode 30)',
+                'language'   => 'Jerman',
+                'type'       => 'Offline',
+                'duration'   => '15 Hari',
+                'price'      => 3500000,
+                'admin_tax'  => 0,
+                'description' => "Fasilitas:\n- Level Dasar Pemula\n- Pembelajaran dengan Modul Khusus\n- Gratis Camp Reguler\n- Sertifikat",
             ],
             [
-                'name'        => 'Program Offline Level A2 (Periode 15)',
-                'price'       => 4000000,
-                'description' => "Bahasa: Jerman | Tipe: Offline | Kategori: A2 | Durasi: 15 Hari\n\nFasilitas:\n- Level Dasar Lanjutan\n- Pembelajaran dengan Modul Khusus\n- Gratis Camp Reguler\n- Sertifikat",
+                'name'       => 'Program Offline Level A2 (Periode 15)',
+                'language'   => 'Jerman',
+                'type'       => 'Offline',
+                'duration'   => '15 Hari',
+                'price'      => 4000000,
+                'admin_tax'  => 0,
+                'description' => "Fasilitas:\n- Level Dasar Lanjutan\n- Pembelajaran dengan Modul Khusus\n- Gratis Camp Reguler\n- Sertifikat",
             ],
             [
-                'name'        => 'Program Offline Level A2 (Periode 30)',
-                'price'       => 4000000,
-                'description' => "Bahasa: Jerman | Tipe: Offline | Kategori: A2 | Durasi: 30 Hari\n\nFasilitas:\n- Level Dasar Lanjutan\n- Pembelajaran dengan Modul Khusus\n- Gratis Camp Reguler\n- Sertifikat",
+                'name'       => 'Program Offline Level A2 (Periode 30)',
+                'language'   => 'Jerman',
+                'type'       => 'Offline',
+                'duration'   => '15 Hari',
+                'price'      => 4000000,
+                'admin_tax'  => 0,
+                'description' => "Fasilitas:\n- Level Dasar Lanjutan\n- Pembelajaran dengan Modul Khusus\n- Gratis Camp Reguler\n- Sertifikat",
             ],
             [
-                'name'        => 'Program Offline Level B1 (Periode 15)',
-                'price'       => 4500000,
-                'description' => "Bahasa: Jerman | Tipe: Offline | Kategori: B1 | Durasi: 15 Hari\n\nFasilitas:\n- Level Menengah\n- Pembelajaran dengan Modul Khusus\n- Program Presentasi Khusus (Hari Sabtu)\n- Gratis Camp Reguler",
+                'name'       => 'Program Offline Level B1 (Periode 15)',
+                'language'   => 'Jerman',
+                'type'       => 'Offline',
+                'duration'   => '15 Hari',
+                'price'      => 4500000,
+                'admin_tax'  => 0,
+                'description' => "Fasilitas:\n- Level Menengah\n- Pembelajaran dengan Modul Khusus\n- Program Presentasi Khusus (Hari Sabtu)\n- Gratis Camp Reguler",
             ],
             [
-                'name'        => 'Program Offline Level B1 (Periode 30)',
-                'price'       => 4500000,
-                'description' => "Bahasa: Jerman | Tipe: Offline | Kategori: B1 | Durasi: 30 Hari\n\nFasilitas:\n- Level Menengah\n- Pembelajaran dengan Modul Khusus\n- Program Presentasi Khusus (Hari Sabtu)\n- Gratis Camp Reguler",
+                'name'       => 'Program Offline Level B1 (Periode 30)',
+                'language'   => 'Jerman',
+                'type'       => 'Offline',
+                'duration'   => '15 Hari',
+                'price'      => 4500000,
+                'admin_tax'  => 0,
+                'description' => "Fasilitas:\n- Level Menengah\n- Pembelajaran dengan Modul Khusus\n- Program Presentasi Khusus (Hari Sabtu)\n- Gratis Camp Reguler",
             ],
             // === ONLINE ===
             [
-                'name'        => 'Kelas Private Online Bahasa Jerman',
-                'price'       => 3960000,
-                'description' => "Bahasa: Jerman | Tipe: Online | Kategori: Private | Durasi: Kelas Satuan Online\n\nFasilitas:\n- Buku\n- Sertifikat\n- Zoom Meeting",
+                'name'       => 'Kelas Private Online Bahasa Jerman',
+                'language'   => 'Jerman',
+                'type'       => 'Online',
+                'duration'   => 'Kelas Satuan',
+                'price'      => 3960000,
+                'admin_tax'  => 0,
+                'description' => "Fasilitas:\n- Buku\n- Sertifikat\n- Zoom Meeting",
             ],
         ];
 
         foreach ($courses as $course) {
             \App\Models\Course::firstOrCreate(
                 ['name' => $course['name']],
-                ['price' => $course['price'], 'description' => $course['description']]
+                $course
             );
         }
     }

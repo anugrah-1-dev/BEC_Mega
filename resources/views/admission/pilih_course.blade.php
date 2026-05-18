@@ -75,6 +75,26 @@
         <form action="{{ route('pilih_course.store') }}" method="POST" id="course-form">
             @csrf
 
+            {{-- Language filter tabs --}}
+            @php
+                $languages = $courses->pluck('language')->unique()->sort()->values();
+                $langColors = ['Inggris'=>'#2563eb','Jerman'=>'#16a34a','Mandarin'=>'#dc2626','Arab'=>'#d97706'];
+            @endphp
+            @if($languages->count() > 1)
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">
+                <button type="button" onclick="filterLanguage('all')" id="tab-all"
+                    style="padding:7px 18px; border-radius:20px; border:1.5px solid #363d72; background:#363d72; color:white; font-size:0.8rem; font-weight:700; cursor:pointer;">
+                    Semua
+                </button>
+                @foreach($languages as $lang)
+                <button type="button" onclick="filterLanguage('{{ $lang }}')" id="tab-{{ Str::slug($lang) }}"
+                    style="padding:7px 18px; border-radius:20px; border:1.5px solid {{ $langColors[$lang] ?? '#363d72' }}; background:white; color:{{ $langColors[$lang] ?? '#363d72' }}; font-size:0.8rem; font-weight:700; cursor:pointer;">
+                    {{ $lang }}
+                </button>
+                @endforeach
+            </div>
+            @endif
+
             {{-- Courses --}}
             <div style="font-size:0.78rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:12px;">Program Kursus Tersedia</div>
 
@@ -86,10 +106,17 @@
             @else
                 <div class="course-grid">
                     @foreach($courses as $course)
-                    <div class="course-card" id="card-{{ $course->id }}" onclick="selectCourse({{ $course->id }})">
+                    <div class="course-card" id="card-{{ $course->id }}"
+                         data-language="{{ $course->language }}"
+                         onclick="selectCourse({{ $course->id }})">
                         <input type="radio" name="course_id" value="{{ $course->id }}" id="course-{{ $course->id }}" required>
                         <div class="pc-top">
-                            <div class="pc-kode">Kode : {{ substr(md5($course->id), 0, 9) }} ⓘ</div>
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+                                <div class="pc-kode">Kode : {{ substr(md5($course->id), 0, 9) }} ⓘ</div>
+                                <span style="background:rgba(255,255,255,0.25); color:white; font-size:0.7rem; font-weight:800; padding:3px 10px; border-radius:12px; letter-spacing:0.04em;">
+                                    {{ strtoupper($course->language ?? 'Inggris') }}
+                                </span>
+                            </div>
                             <h3 class="pc-price">Rp {{ number_format($course->price, 0, ',', '.') }}</h3>
                             <div class="pc-name">{{ strtoupper($course->name) }}</div>
                             <div class="pc-desc" style="display: flex; gap: 8px; font-size: 0.8rem; margin-bottom: 8px; opacity: 0.95;">
@@ -243,5 +270,17 @@ document.addEventListener('DOMContentLoaded', function() {
         calculateTotal();
     }
 });
+
+function filterLanguage(lang) {
+    document.querySelectorAll('.course-card').forEach(card => {
+        card.style.display = (lang === 'all' || card.dataset.language === lang) ? '' : 'none';
+    });
+    // Update active tab style
+    document.querySelectorAll('[id^="tab-"]').forEach(btn => {
+        const isActive = btn.id === 'tab-' + (lang === 'all' ? 'all' : lang.toLowerCase().replace(/ /g, '-'));
+        btn.style.background = isActive ? '#363d72' : 'white';
+        btn.style.color      = isActive ? 'white'   : btn.style.borderColor;
+    });
+}
 </script>
 @endsection
