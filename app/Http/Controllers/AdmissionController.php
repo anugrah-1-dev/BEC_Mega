@@ -112,15 +112,18 @@ class AdmissionController extends Controller
     public function storeIsiData(Request $request)
     {
         $request->validate([
-            'phone' => 'required',
-            'address' => 'required',
-            'gender' => 'required',
-            'birth_date' => 'required|date',
+            'phone'          => 'required',
+            'guardian_phone' => 'nullable',
+            'address'        => 'required',
+            'gender'         => 'required',
+            'birth_place'    => 'nullable|string|max:100',
+            'birth_date'     => 'required|date',
+            'uniform_size'   => 'required|string|max:10',
         ]);
 
         StudentDetail::updateOrCreate(
             ['user_id' => Auth::id()],
-            $request->only(['phone', 'address', 'gender', 'birth_date'])
+            $request->only(['phone', 'guardian_phone', 'address', 'gender', 'birth_place', 'birth_date', 'uniform_size'])
         );
 
         return redirect()->route('pilih_course')
@@ -150,9 +153,12 @@ class AdmissionController extends Controller
         Registration::updateOrCreate(
             ['user_id' => Auth::id(), 'status' => 'pending'],
             [
-                'course_id' => $request->course_id,
-                'period_id' => $request->period_id,
+                'course_id'    => $request->course_id,
+                'period_id'    => $request->period_id,
                 'transport_id' => $request->transport_id,
+                'has_catering' => $request->boolean('has_catering'),
+                'has_laundry'  => $request->boolean('has_laundry'),
+                'has_holiday'  => $request->boolean('has_holiday'),
                 'payment_status' => 'unpaid',
             ]
         );

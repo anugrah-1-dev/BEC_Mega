@@ -19,7 +19,10 @@ class Registration extends Model
         'snap_token',
         'payment_proof',
         'status',
-        'payment_status'
+        'payment_status',
+        'has_catering',
+        'has_laundry',
+        'has_holiday',
     ];
 
     public function user()

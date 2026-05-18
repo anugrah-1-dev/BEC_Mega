@@ -136,6 +136,31 @@
                 @endif
             </div>
 
+            {{-- Tambahan Layanan --}}
+            <div class="period-select-wrap" style="margin-top: 15px;">
+                <div style="font-size:0.78rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:14px;">
+                    Tambahan Layanan <span style="font-weight:400; text-transform:none; font-size:0.75rem; color:#94a3b8;">(Opsional)</span>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:12px;">
+                    @foreach([
+                        ['has_catering', 'Catering', '🍽️'],
+                        ['has_laundry',  'Laundry',  '👕'],
+                        ['has_holiday',  'Holiday',  '🏖️'],
+                    ] as [$field, $label, $icon])
+                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;
+                        padding:14px 22px; border:1.5px solid #e2e8f0; border-radius:10px;
+                        background:#fafafa; transition:all 0.2s;"
+                        onclick="this.style.borderColor=this.querySelector('input').checked?'#e2e8f0':'#363d72';
+                                 this.style.background=this.querySelector('input').checked?'#fafafa':'rgba(54,61,114,0.06)';">
+                        <input type="checkbox" name="{{ $field }}" value="1"
+                               style="accent-color:#363d72; width:16px; height:16px;"
+                               onchange="calculateTotal()">
+                        <span style="font-size:0.875rem; font-weight:600; color:#0f172a;">{{ $icon }} {{ $label }}</span>
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+
             {{-- Transport --}}
             <div class="period-select-wrap" style="margin-top: 15px;">
                 <div style="font-size:0.78rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:14px;">Layanan Penjemputan / Transportasi</div>

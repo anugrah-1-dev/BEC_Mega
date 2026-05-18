@@ -25,38 +25,7 @@ class AdmissionSeeder extends Seeder
             'role' => 'student',
         ]);
 
-        // Courses
-        \App\Models\Course::firstOrCreate(['name' => 'Basic English Course'], [
-            'price' => 750000,
-            'description' => 'Kursus dasar untuk pemula yang ingin belajar bahasa Inggris dari nol.'
-        ]);
-
-        \App\Models\Course::firstOrCreate(['name' => 'Intermediate English'], [
-            'price' => 950000,
-            'description' => 'Kelas lanjutan untuk mengasah kemampuan percakapan dan grammar.'
-        ]);
-
-        \App\Models\Course::firstOrCreate(['name' => 'Short Program (2 Minggu)'], [
-            'price' => 500000,
-            'description' => 'Program singkat intensif selama 2 minggu.'
-        ]);
-
-        // Periods
-        \App\Models\Period::firstOrCreate(['name' => 'Periode April 2026'], [
-            'date' => '10-04-2026',
-            'start_date' => '2026-04-10'
-        ]);
-
-        \App\Models\Period::firstOrCreate(['name' => 'Periode Mei 2026'], [
-            'date' => '10-05-2026',
-            'start_date' => '2026-05-10'
-        ]);
-
-        \App\Models\Period::firstOrCreate(['name' => 'Periode Juni 2026'], [
-            'date' => '10-06-2026',
-            'start_date' => '2026-06-10'
-        ]);
-
+               
         // Transports
         \App\Models\Transport::firstOrCreate(['name' => 'Antar Jemput'], [
             'price' => 150000,

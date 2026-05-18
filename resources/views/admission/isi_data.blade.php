@@ -45,6 +45,14 @@
                 </div>
 
                 <div class="form-group" style="grid-column: span 2;">
+                    <label class="form-label">No. HP Wali</label>
+                    <input type="text" name="guardian_phone" class="form-control"
+                           value="{{ $detail->guardian_phone ?? '' }}"
+                           placeholder="Contoh: 08123456789">
+                    @error('guardian_phone') <div class="form-error">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="form-group" style="grid-column: span 2;">
                     <label class="form-label">Alamat Lengkap</label>
                     <textarea name="address" rows="3" class="form-control"
                               required placeholder="Jalan, Desa/Kelurahan, Kecamatan, Kota...">{{ $detail->address ?? '' }}</textarea>
@@ -70,10 +78,31 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label">Tempat Lahir</label>
+                    <input type="text" name="birth_place" class="form-control"
+                           value="{{ $detail->birth_place ?? '' }}"
+                           placeholder="Contoh: Yogyakarta">
+                    @error('birth_place') <div class="form-error">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="form-group">
                     <label class="form-label">Tanggal Lahir</label>
                     <input type="date" name="birth_date" class="form-control"
                            value="{{ $detail->birth_date ?? '' }}" required>
                     @error('birth_date') <div class="form-error">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ukuran Seragam</label>
+                    <select name="uniform_size" class="form-control" required>
+                        <option value="">— Pilih Ukuran —</option>
+                        @foreach(['XS','S','M','L','XL','XXL','XXXL'] as $size)
+                        <option value="{{ $size }}" {{ ($detail->uniform_size ?? '') == $size ? 'selected' : '' }}>
+                            {{ $size }}
+                        </option>
+                        @endforeach
+                    </select>
+                    @error('uniform_size') <div class="form-error">{{ $message }}</div> @enderror
                 </div>
             </div>
 
