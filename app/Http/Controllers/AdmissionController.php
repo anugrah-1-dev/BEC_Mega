@@ -519,7 +519,11 @@ class AdmissionController extends Controller
     {
         $courses = Course::all();
         $periods = Period::all();
-        $transports = Transport::where('status', 'active')->get();
+        try {
+            $transports = Transport::where('status', 'active')->get();
+        } catch (\Exception $e) {
+            $transports = Transport::all();
+        }
         return view('admission.register_pos', compact('courses', 'periods', 'transports'));
     }
 
