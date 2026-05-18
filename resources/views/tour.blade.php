@@ -3686,15 +3686,14 @@
             // Langsung buka form registrasi tanpa layar login portal
             window.openDirectRegistration = function() {
                 if (typeof window.closeAllModals === 'function') window.closeAllModals();
-                regModalOverlay.classList.add('active');
                 if (!audio.paused) {
                     audio.pause();
                 }
+                // Masuk ke portal SEBELUM modal dibuka agar layar login tidak terlihat
                 enterPortal('student');
-                setTimeout(() => {
-                    const menuReg = document.getElementById('menu-reg');
-                    switchRegTab('tab-registration', menuReg);
-                }, 50);
+                const menuReg = document.getElementById('menu-reg');
+                switchRegTab('tab-registration', menuReg);
+                regModalOverlay.classList.add('active');
             };
 
             function closeRegModal() {
