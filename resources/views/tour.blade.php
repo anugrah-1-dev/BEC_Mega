@@ -3697,7 +3697,10 @@
                     iconUnmuted.style.display = 'none';
                 }
                 enterPortal('student');
-                setTimeout(() => switchRegTab('tab-registration'), 50);
+                setTimeout(() => {
+                    const menuReg = document.getElementById('menu-reg');
+                    switchRegTab('tab-registration', menuReg);
+                }, 50);
             };
 
             function closeRegModal() {
