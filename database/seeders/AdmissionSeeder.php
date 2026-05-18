@@ -52,5 +52,18 @@ class AdmissionSeeder extends Seeder
             'date' => '10-05-2026',
             'start_date' => '2026-05-10'
         ]);
+
+        // Transports
+        \App\Models\Transport::create([
+            'name' => 'Antar Jemput',
+            'price' => 150000,
+            'status' => 'active',
+        ]);
+
+        \App\Models\Transport::create([
+            'name' => 'Mandiri (Tanpa Transport)',
+            'price' => 0,
+            'status' => 'active',
+        ]);
     }
 }
