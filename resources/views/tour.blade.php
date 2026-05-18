@@ -1286,6 +1286,33 @@
             max-height: 95vh !important;
         }
 
+        /* Direct Registration Mode - Form only, no sidebar/dashboard */
+        .registration-box.direct-reg {
+            max-width: 680px !important;
+            width: 95vw !important;
+            height: auto !important;
+            max-height: 90vh !important;
+        }
+        .registration-box.direct-reg .db-sidebar { display: none !important; }
+        .registration-box.direct-reg .header-welcome { display: none !important; }
+        .registration-box.direct-reg .db-header {
+            justify-content: space-between !important;
+        }
+        .registration-box.direct-reg .db-header::before {
+            content: 'Formulir Pendaftaran BEC';
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+        }
+        .registration-box.direct-reg #portal-interface {
+            height: auto !important;
+            flex-direction: column !important;
+        }
+        .registration-box.direct-reg .db-content {
+            overflow-y: auto !important;
+            max-height: calc(90vh - 60px) !important;
+        }
+
         /* Sidebar Styling */
         .db-sidebar {
             width: 260px;
@@ -3683,18 +3710,31 @@
             // Langsung buka form registrasi tanpa layar login portal
             window.openDirectRegistration = function() {
                 if (typeof window.closeAllModals === 'function') window.closeAllModals();
-                if (!audio.paused) {
-                    audio.pause();
-                }
-                // Masuk ke portal SEBELUM modal dibuka agar layar login tidak terlihat
-                enterPortal('student');
-                const menuReg = document.getElementById('menu-reg');
-                switchRegTab('tab-registration', menuReg);
+                if (!audio.paused) { audio.pause(); }
+
+                // Mode langsung: tampilkan form pendaftaran saja, tanpa sidebar/dashboard
+                const box = document.getElementById('registration-modal-box');
+                box.classList.add('expanded', 'direct-reg');
+
+                // Bypass portal-entry, langsung ke portal-interface
+                portalEntry.style.display = 'none';
+                portalInterface.style.display = 'flex';
+
+                // Aktifkan hanya tab-registration
+                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                const regPane = document.getElementById('tab-registration');
+                if (regPane) regPane.classList.add('active');
+
                 regModalOverlay.classList.add('active');
             };
 
             function closeRegModal() {
                 regModalOverlay.classList.remove('active');
+                // Reset state untuk penggunaan berikutnya
+                const box = document.getElementById('registration-modal-box');
+                box.classList.remove('direct-reg', 'expanded');
+                portalEntry.style.display = 'flex';
+                portalInterface.style.display = 'none';
             }
             window.closeRegModal = closeRegModal;
 
