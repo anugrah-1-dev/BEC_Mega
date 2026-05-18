@@ -3460,8 +3460,6 @@
                 tutorialOverlay.classList.add('active');
                 if (!audio.paused) {
                     audio.pause();
-                    iconMuted.style.display = 'block';
-                    iconUnmuted.style.display = 'none';
                 }
 
                 // Automatically increment all stats when tutorial is opened
@@ -3680,8 +3678,6 @@
                 regModalOverlay.classList.add('active');
                 if (!audio.paused) {
                     audio.pause();
-                    iconMuted.style.display = 'block';
-                    iconUnmuted.style.display = 'none';
                 }
                 exitPortal(); // Start at entry screen
             }
@@ -3693,8 +3689,6 @@
                 regModalOverlay.classList.add('active');
                 if (!audio.paused) {
                     audio.pause();
-                    iconMuted.style.display = 'block';
-                    iconUnmuted.style.display = 'none';
                 }
                 enterPortal('student');
                 setTimeout(() => {
