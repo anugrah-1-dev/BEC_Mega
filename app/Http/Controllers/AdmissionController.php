@@ -542,7 +542,6 @@ class AdmissionController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make('password'), // default password untuk semi-login
                 'role' => 'student',
-                'Status' => 'Aktif',
             ]);
         }
 
