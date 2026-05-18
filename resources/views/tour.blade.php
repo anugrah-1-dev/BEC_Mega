@@ -2590,6 +2590,106 @@
                             </div>
                         </div>
 
+                        <!-- Tab: Profile (Student) -->
+                        <div id="tab-profile" class="tab-pane">
+                            <div style="margin-bottom: 25px;">
+                                <h2 style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">Profil Pendaftaran</h2>
+                                <p style="color: #64748b; margin-top: 6px;">Informasi akun Anda yang terdaftar di BEC.</p>
+                            </div>
+                            @auth
+                            <div class="db-card" style="max-width: 600px;">
+                                <div style="padding: 30px; display: flex; flex-direction: column; gap: 18px;">
+                                    <div style="display: flex; gap: 16px; align-items: center; padding-bottom: 20px; border-bottom: 1px solid #e2e8f0;">
+                                        <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #003399, #4f46e5); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.75rem; font-weight: 800;">
+                                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 1.25rem; font-weight: 800; color: #1e293b;">{{ auth()->user()->name }}</div>
+                                            <div style="font-size: 0.85rem; color: #64748b;">{{ ucfirst(auth()->user()->role ?? 'student') }}</div>
+                                        </div>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px; align-items: center;">
+                                        <span style="color: #64748b; font-size: 0.875rem; font-weight: 600;">Email</span>
+                                        <span style="color: #1e293b; font-weight: 700;">{{ auth()->user()->email }}</span>
+                                        <span style="color: #64748b; font-size: 0.875rem; font-weight: 600;">No. HP</span>
+                                        <span style="color: #1e293b; font-weight: 700;">{{ auth()->user()->studentDetail->phone ?? '-' }}</span>
+                                        <span style="color: #64748b; font-size: 0.875rem; font-weight: 600;">Status Akun</span>
+                                        <span class="badge badge-green">{{ strtoupper(auth()->user()->Status ?? 'Aktif') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            @else
+                            <div style="text-align: center; padding: 60px 20px; color: #94a3b8;">
+                                <p style="font-size: 1.1rem;">Silakan masuk terlebih dahulu untuk melihat profil.</p>
+                            </div>
+                            @endauth
+                        </div>
+
+                        <!-- Tab: Registration Form (Student Pilih Program) -->
+                        <div id="tab-registration" class="tab-pane">
+                            <div style="margin-bottom: 25px;">
+                                <h2 style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">Formulir Pendaftaran</h2>
+                                <p style="color: #64748b; margin-top: 6px;">Pilih program, periode, dan transport untuk mendaftar kursus BEC.</p>
+                            </div>
+                            <div class="db-card" style="max-width: 640px;">
+                                <form action="{{ route('register.pos.process') }}" method="POST" style="padding: 30px; display: flex; flex-direction: column; gap: 20px;">
+                                    @csrf
+                                    <div>
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Nama Lengkap</label>
+                                        <input type="text" name="name" value="{{ auth()->user()->name ?? '' }}" required
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit;"
+                                            placeholder="Nama lengkap Anda">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Email</label>
+                                        <input type="email" name="email" value="{{ auth()->user()->email ?? '' }}" required
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit;"
+                                            placeholder="email@contoh.com">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">No. HP / WhatsApp</label>
+                                        <input type="text" name="phone" required
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit;"
+                                            placeholder="08xxxxxxxxxx">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Pilih Program Kursus</label>
+                                        <select name="course_id" required
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white;">
+                                            <option value="">-- Pilih Program --</option>
+                                            @foreach($courses as $course)
+                                            <option value="{{ $course->id }}">{{ $course->name }} — Rp {{ number_format($course->price, 0, ',', '.') }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Pilih Periode Belajar</label>
+                                        <select name="period_id" required
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white;">
+                                            <option value="">-- Pilih Periode --</option>
+                                            @foreach($periods as $period)
+                                            <option value="{{ $period->id }}">{{ $period->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Transport</label>
+                                        <select name="transport_id" required
+                                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; outline: none; font-family: inherit; background: white;">
+                                            <option value="">-- Pilih Transport --</option>
+                                            @foreach($transports as $transport)
+                                            <option value="{{ $transport->id }}">{{ $transport->name }} — Rp {{ number_format($transport->price, 0, ',', '.') }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <button type="submit"
+                                        style="width: 100%; padding: 14px; background: linear-gradient(135deg, #003399, #4f46e5); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; letter-spacing: 0.5px;">
+                                        DAFTAR SEKARANG →
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
                     </div> <!-- end db-body -->
                 </div> <!-- end db-content -->
             </div> <!-- end portal interface -->
@@ -3525,6 +3625,7 @@
                         { id: 'menu-payments', tab: 'tab-payments', label: 'Pembayaran', icon: '<svg viewBox="0 0 24 24" style="width:20px;height:20px;"><path fill="currentColor" d="M21,18V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5A2,2 0 0,1 5,3H19A2,2 0 0,1 21,5V6H12C10.89,6 10,6.9 10,8V16A2,2 0 0,0 12,18H21M12,16H22V8H12V16M16,13.5A1.5,1.5 0 1,1 17.5,12A1.5,1.5 0 0,1 16,13.5Z" /></svg>' },
                         { id: 'menu-status', tab: 'tab-status', label: 'Status', icon: '<svg viewBox="0 0 24 24" style="width:20px;height:20px;"><path fill="currentColor" d="M12,2A10,10 0 1,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 1,1 20,12A8,8 0 0,1 12,20M11,12V7H13V12H11M11,17V15H13V17H11Z" /></svg>' }
                     ];
+                } else {
                     roleLabel.textContent = 'BEC ADMIN';
                     studentOverview.style.display = 'none';
                     adminOverview.style.display = 'block';
