@@ -2147,7 +2147,7 @@
             </form>
 
             <div class="form-footer" style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-                <span>Sudah punya akun? <a href="{{ route('login') }}">Masuk di sini</a></span>
+                <span>Sudah punya akun? <a href="javascript:void(0)" onclick="closeRegisterDOM()">Kembali ke tour</a></span>
                 <a href="javascript:void(0)" onclick="closeRegisterDOM()" class="btn-outline" style="margin-top:0; width:auto; padding:10px 14px;">
                     Kembali ke Virtual Tour
                 </a>
@@ -2878,10 +2878,7 @@
             if (overlay) overlay.style.display = 'none';
         };
 
-        @if ($errors->any())
-            // Auto open if there are validation errors from Laravel backend
-            document.addEventListener('DOMContentLoaded', function() { window.openRegisterIframe(); });
-        @endif
+        // Note: validation errors are now handled via AJAX inline in the modal
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -3858,10 +3855,7 @@
 
             // Scope definition removed, defined globally higher up
 
-            @if ($errors->any())
-                // Auto-open if registration had validation errors
-                window.openRegisterIframe();
-            @endif
+            // Note: validation errors handled via AJAX - no auto-open needed
 
             // Expose globally
             window.openRegModal = openRegModal;
