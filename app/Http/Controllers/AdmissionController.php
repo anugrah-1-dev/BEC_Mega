@@ -92,7 +92,11 @@ class AdmissionController extends Controller
             ->latest()
             ->first();
 
-        $banks = DB::table('banks')->where('status', 'active')->get();
+        try {
+            $banks = DB::table('banks')->where('status', 'active')->get();
+        } catch (\Exception $e) {
+            $banks = DB::table('banks')->get();
+        }
         return view('admission.dashboard', compact('user', 'registration', 'banks'));
     }
 
@@ -173,7 +177,11 @@ class AdmissionController extends Controller
     {
         $registration = Registration::where('user_id', Auth::id())->latest()->first();
 
-        $banks = DB::table('banks')->where('status', 'active')->get();
+        try {
+            $banks = DB::table('banks')->where('status', 'active')->get();
+        } catch (\Exception $e) {
+            $banks = DB::table('banks')->get();
+        }
         return view('admission.upload_bayar', compact('registration', 'banks'));
     }
 
