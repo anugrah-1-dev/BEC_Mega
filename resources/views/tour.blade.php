@@ -2590,6 +2590,59 @@
                             </div>
                         </div>
 
+                        <!-- Tab: Review (Admin) -->
+                        <div id="tab-review" class="tab-pane">
+                            <div style="margin-bottom: 25px;">
+                                <h2 style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">Review & Penilaian Dokumen</h2>
+                                <p style="color: #64748b; margin-top: 6px;">Tinjau dan verifikasi data pendaftaran calon siswa.</p>
+                            </div>
+                            <div class="db-card">
+                                <div style="padding: 25px 30px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                                    <h4 style="margin:0; font-weight: 800; color: #1e293b;">Daftar Pendaftaran Masuk</h4>
+                                    <span class="badge badge-blue">{{ $newRegistrations->where('status', 'pending')->count() }} Menunggu</span>
+                                </div>
+                                <div style="overflow-x: auto;">
+                                    <table class="db-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama Pendaftar</th>
+                                                <th>Email</th>
+                                                <th>Program</th>
+                                                <th>Periode</th>
+                                                <th>Tgl Daftar</th>
+                                                <th>Status Bayar</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($newRegistrations as $reg)
+                                            <tr>
+                                                <td style="font-weight: 700; color: #1e293b;">{{ $reg->user->name ?? 'N/A' }}</td>
+                                                <td style="color: #64748b; font-size: 0.85rem;">{{ $reg->user->email ?? '-' }}</td>
+                                                <td><span class="badge badge-blue">{{ $reg->course->name ?? 'N/A' }}</span></td>
+                                                <td style="color: #64748b; font-size: 0.85rem;">{{ $reg->period->name ?? '-' }}</td>
+                                                <td style="color: #64748b; font-size: 0.85rem;">{{ $reg->created_at->format('d/m/Y') }}</td>
+                                                <td>
+                                                    <span class="badge {{ $reg->payment_status == 'paid' ? 'badge-green' : 'badge-blue' }}">
+                                                        {{ strtoupper($reg->payment_status ?? 'unpaid') }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge {{ $reg->status == 'verified' ? 'badge-green' : ($reg->status == 'rejected' ? '' : 'badge-blue') }}"
+                                                          style="{{ $reg->status == 'rejected' ? 'background:#ef4444;color:white;' : '' }}">
+                                                        {{ strtoupper($reg->status) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr><td colspan="7" style="text-align:center; padding:40px; color:#94a3b8;">Belum ada pendaftaran masuk.</td></tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Tab: Profile (Student) -->
                         <div id="tab-profile" class="tab-pane">
                             <div style="margin-bottom: 25px;">
