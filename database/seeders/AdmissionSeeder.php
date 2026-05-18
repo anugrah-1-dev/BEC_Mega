@@ -17,14 +17,12 @@ class AdmissionSeeder extends Seeder
             'name' => 'Admin BEC',
             'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'admin',
-            'Status' => 'Aktif',
         ]);
 
         \App\Models\User::firstOrCreate(['email' => 'siswa@mail.com'], [
             'name' => 'Siswa Test',
             'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'student',
-            'Status' => 'Aktif',
         ]);
 
         // Courses
