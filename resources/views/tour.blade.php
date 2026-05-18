@@ -2858,7 +2858,7 @@
                 "ruang-5c": "5C ( siang hari ).jpeg", "ruang-5d": "5D ( Siang Hari ).png", "ruang-5e": "5E ( Siang Hari ).jpeg", "ruang-5f": "5 f ( siang hari ).jpeg",
                 "ruang-5g": "5G ( Siang hari ).png", "ruang-6": "6 ( siang hari ).jpeg", "ruang-6a": "6a ( siang hari ).png",
                 "ruang-7": "7 ( Siang Hari ).jpeg", "ruang-7a": "7a ( siang hari  ).jpeg", "ruang-7b": "7b ( siang hari ).jpeg", 
-                "ruang-8": "8 ( siang hari ).jpeg", "ruang-9": "9 ( Siang hari ).png", "ruang-11": "11 ( siang hari ).png", 
+                "ruang-8": "8 ( Siang Hari ).jpeg", "ruang-9": "9 ( Siang hari ).png", "ruang-11": "11 ( siang hari ).png", 
                 "ruang-11a": "11 a ( Siang Hari ).png", "ruang-11b": "11 b ( siang hari ).png", "ruang-12": "12 ( siang hari ).jpeg", 
                 "ruang-12a": "12a.jpg", "ruang-13": "13 ( siang hari ).png", "ruang-14": "14 ( siang hari ).jpeg",
                 "camp-reguler": "Tampilan Camp Reguler.jpg", "ruang-2a-malam": "2 a siang.png",
