@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VirtualAR</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/marzipano@0.10.2/dist/marzipano.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Model Viewer for GLB 3D objects -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
         body, html {
             margin: 0;
             padding: 0;
@@ -2029,7 +2029,8 @@
                         </div>
                     </div>
                     <div class="tcomment-input-area" style="padding: 20px; background: #fff; border-top: 1px solid #eee;">
-                        <textarea id="tmodal-input-comment" placeholder="Tulis pertanyaan Anda..." style="width: 100%; height: 90px; padding: 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 0.95rem; outline: none; resize: none; margin-bottom: 12px;"></textarea>
+                        <label for="tmodal-input-comment" class="sr-only">Tulis pertanyaan Anda</label>
+                        <textarea id="tmodal-input-comment" placeholder="Tulis pertanyaan Anda..." aria-label="Tulis pertanyaan Anda" style="width: 100%; height: 90px; padding: 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 0.95rem; outline: none; resize: none; margin-bottom: 12px;"></textarea>
                         <button id="tmodal-send-comment" onclick="window.submitComment()" style="width: 100%; background: #4f46e5; color: white; border: none; border-radius: 10px; padding: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);">Kirim Pertanyaan</button>
                     </div>
                 </div>
@@ -2119,26 +2120,26 @@
                 @csrf
                 <div class="form-grid">
                     <div class="form-group full">
-                        <label class="form-label">Nama Lengkap</label>
-                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" required placeholder="Sesuai kartu identitas">
+                        <label class="form-label" for="reg-name">Nama Lengkap</label>
+                        <input type="text" id="reg-name" name="name" class="form-control" value="{{ old('name') }}" required placeholder="Sesuai kartu identitas" autocomplete="name">
                         @error('name') <div class="form-error">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group full">
-                        <label class="form-label">Alamat Email</label>
-                        <input type="email" name="email" class="form-control" value="{{ old('email') }}" required placeholder="aktif@email.com">
+                        <label class="form-label" for="reg-email">Alamat Email</label>
+                        <input type="email" id="reg-email" name="email" class="form-control" value="{{ old('email') }}" required placeholder="aktif@email.com" autocomplete="email">
                         @error('email') <div class="form-error">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" required placeholder="Min. 8 karakter">
+                        <label class="form-label" for="reg-password">Password</label>
+                        <input type="password" id="reg-password" name="password" class="form-control" required placeholder="Min. 8 karakter" autocomplete="new-password">
                         @error('password') <div class="form-error">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Konfirmasi Password</label>
-                        <input type="password" name="password_confirmation" class="form-control" required placeholder="Ulangi password">
+                        <label class="form-label" for="reg-password-confirm">Konfirmasi Password</label>
+                        <input type="password" id="reg-password-confirm" name="password_confirmation" class="form-control" required placeholder="Ulangi password" autocomplete="new-password">
                     </div>
                 </div>
 
@@ -2174,12 +2175,12 @@
 
                     <div style="text-align: left;">
                         <div style="margin-bottom: 20px;">
-                            <label style="display: block; font-size: 0.875rem; font-weight: 700; color: #475569; margin-bottom: 8px;">Username atau Email</label>
-                            <input type="text" id="portal-user" placeholder="Masukkan username anda" style="width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none; transition: 0.2s;">
+                            <label for="portal-user" style="display: block; font-size: 0.875rem; font-weight: 700; color: #475569; margin-bottom: 8px;">Username atau Email</label>
+                            <input type="text" id="portal-user" placeholder="Masukkan username anda" autocomplete="username" style="width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none; transition: 0.2s;">
                         </div>
                         <div style="margin-bottom: 30px;">
-                            <label style="display: block; font-size: 0.875rem; font-weight: 700; color: #475569; margin-bottom: 8px;">Password</label>
-                            <input type="password" id="portal-pass" placeholder="••••••••" style="width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none; transition: 0.2s;">
+                            <label for="portal-pass" style="display: block; font-size: 0.875rem; font-weight: 700; color: #475569; margin-bottom: 8px;">Password</label>
+                            <input type="password" id="portal-pass" placeholder="••••••••" autocomplete="current-password" style="width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none; transition: 0.2s;">
                         </div>
                         <button class="btn-portal-primary" onclick="attemptLogin()">MASUK KE PORTAL</button>
                     </div>
@@ -2595,7 +2596,7 @@
         </div> <!-- end registration box -->
     </div> <!-- end registration modal overlay -->
 
-    <script src="https://cdn.jsdelivr.net/npm/marzipano@0.10.2/dist/marzipano.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marzipano@0.10.2/dist/marzipano.js"></script>
     <script>
         window.closeAllModals = function() {
             // Cancel Voice
