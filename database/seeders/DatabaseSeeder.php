@@ -23,5 +23,14 @@ class DatabaseSeeder extends Seeder
             'comment_text' => 'Halo Sobat Brilliant! Silakan berikan tanggapan atau pertanyaan Anda di sini.',
             'is_admin' => true,
         ]);
+
+        $this->call([
+            AdmissionSeeder::class,
+            PeriodSeeder::class,
+            CourseSeeder::class,
+            GermanCourseSeeder::class,
+            MandarinCourseSeeder::class,
+            ArabicCourseSeeder::class,
+        ]);
     }
 }
