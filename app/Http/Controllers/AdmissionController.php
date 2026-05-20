@@ -138,7 +138,11 @@ class AdmissionController extends Controller
         $courses = Course::all();
         $periods = Period::all();
         $transports = Transport::where('status', 'active')->get();
-        $features = DB::table('course_features')->where('status', 'active')->get()->groupBy('course_id');
+        try {
+            $features = DB::table('course_features')->where('status', 'active')->get()->groupBy('course_id');
+        } catch (\Exception $e) {
+            $features = collect();
+        }
         $additionalServices = AdditionalService::where('is_active', true)->orderBy('name')->get();
 
         return view('admission.pilih_course', compact('courses', 'periods', 'features', 'transports', 'additionalServices'));
