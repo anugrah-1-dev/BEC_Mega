@@ -2174,6 +2174,7 @@
 
             <div class="ar-frame-wrap" style="height: 100vh; width: 100vw; position: relative;">
                 <model-viewer id="ar-modal-viewer" src="{{ asset('AR/model/bangunan3d.glb') }}" 
+                    ios-src="{{ asset('AR/model/bangunan3d.usdz') }}"
                     ar ar-modes="webxr scene-viewer quick-look" 
                     camera-controls auto-rotate shadow-intensity="1" 
                     exposure="1" environment-image="neutral"
