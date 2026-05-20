@@ -472,6 +472,56 @@
         .btn-footer i { font-size: 20px; }
         .btn-footer.primary { background: #0044cc; } /* Slightly different shade for primary action if needed */
 
+        /* ===== MOBILE RESPONSIVE FOOTER ===== */
+        @media (max-width: 768px) {
+            #footer-bar {
+                height: auto;
+                padding: 10px 12px;
+                grid-template-columns: auto 1fr 1fr;
+                gap: 8px;
+            }
+            .footer-logo img {
+                height: 48px;
+            }
+            .footer-center, .footer-right {
+                justify-content: center;
+            }
+            .btn-footer {
+                padding: 10px 12px;
+                font-size: 11px;
+                gap: 6px;
+                border-radius: 6px;
+                white-space: nowrap;
+            }
+            .btn-footer svg {
+                width: 16px !important;
+                height: 16px !important;
+                flex-shrink: 0;
+            }
+        }
+        @media (max-width: 480px) {
+            #footer-bar {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+                padding: 8px 10px;
+                gap: 6px;
+            }
+            .footer-logo {
+                grid-column: 1 / -1;
+                justify-content: center;
+            }
+            .footer-center, .footer-right {
+                justify-content: center;
+            }
+            .btn-footer {
+                padding: 9px 10px;
+                font-size: 10px;
+                gap: 5px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
         /* Hotspots Styling */
         .hotspot {
             cursor: pointer;
