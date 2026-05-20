@@ -2173,6 +2173,13 @@
             </div>
 
             <div class="ar-frame-wrap" style="height: 100vh; width: 100vw; position: relative;">
+                <!-- AR Not Supported Notice -->
+                <div id="ar-not-supported-notice" style="display:none; position:absolute; top:80px; left:50%; transform:translateX(-50%); z-index:200; background:rgba(30,30,30,0.92); color:#fff; border-radius:14px; padding:18px 24px; max-width:320px; width:90%; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.4); backdrop-filter:blur(10px);">
+                    <div style="font-size:2rem; margin-bottom:8px;">📱</div>
+                    <div style="font-weight:700; font-size:15px; margin-bottom:6px;">Perangkat Tidak Mendukung AR</div>
+                    <div style="font-size:13px; color:#ccc; line-height:1.5;">HP kamu belum mendukung fitur AR. Kamu tetap bisa <strong>memutar & melihat model 3D bangunan</strong> di bawah ini.</div>
+                </div>
+
                 <model-viewer id="ar-modal-viewer" src="{{ asset('AR/model/bangunan3d.glb') }}" 
                     ios-src="{{ asset('AR/model/bangunan3d.usdz') }}"
                     ar ar-modes="webxr quick-look scene-viewer" 
@@ -3067,6 +3074,9 @@
                 setTimeout(() => { 
                     if (arModal) {
                         arModal.style.display = 'none';
+                        // Hide AR not supported notice
+                        const arNotSupported = document.getElementById('ar-not-supported-notice');
+                        if (arNotSupported) arNotSupported.style.display = 'none';
                         // Reset to default building model
                         const modalViewer = document.getElementById('ar-modal-viewer');
                         if (modalViewer) {
@@ -3439,10 +3449,27 @@
                         const arModal = document.getElementById('ar-modal-overlay');
                         const scanningOverlay = document.getElementById('ar-scanning-overlay');
                         const scanningVideo = document.getElementById('ar-scanning-video');
+                        const arNotSupported = document.getElementById('ar-not-supported-notice');
 
                         if (arModal && scanningOverlay) {
                             arModal.style.display = 'flex';
                             arModal.classList.add('active');
+
+                            // Cek apakah perangkat support AR
+                            const mv = document.getElementById('ar-modal-viewer');
+                            if (mv) {
+                                mv.addEventListener('load', () => {
+                                    if (!mv.canActivateAR && arNotSupported) {
+                                        arNotSupported.style.display = 'block';
+                                    }
+                                }, { once: true });
+                                // Fallback check jika model sudah loaded
+                                setTimeout(() => {
+                                    if (!mv.canActivateAR && arNotSupported) {
+                                        arNotSupported.style.display = 'block';
+                                    }
+                                }, 2000);
+                            }
                             
                             // Start Camera for Scanning Phase
                             scanningOverlay.style.display = 'flex';
