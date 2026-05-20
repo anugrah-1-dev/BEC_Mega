@@ -498,6 +498,22 @@
                 height: 16px !important;
                 flex-shrink: 0;
             }
+            #room-info-card {
+                bottom: 120px;
+                left: 12px;
+                padding: 12px 16px;
+                min-width: 0;
+                max-width: calc(100vw - 24px);
+                border-radius: 10px;
+            }
+            #room-info-card h4 {
+                font-size: 16px;
+                margin-bottom: 4px;
+            }
+            #room-info-card p {
+                font-size: 12px;
+                max-width: 100% !important;
+            }
         }
         @media (max-width: 480px) {
             #footer-bar {
@@ -519,6 +535,16 @@
                 gap: 5px;
                 width: 100%;
                 justify-content: center;
+            }
+            #room-info-card {
+                bottom: 140px;
+                padding: 10px 14px;
+            }
+            #room-info-card h4 {
+                font-size: 14px;
+            }
+            #room-info-card p {
+                font-size: 11px;
             }
         }
 
