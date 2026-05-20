@@ -8,13 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('course_features', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
-            $table->string('feature');
-            $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('course_features')) {
+            Schema::create('course_features', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+                $table->string('feature');
+                $table->enum('status', ['active', 'inactive'])->default('active');
+                $table->timestamps();
+            });
+        }
     }
 
     public function down(): void
