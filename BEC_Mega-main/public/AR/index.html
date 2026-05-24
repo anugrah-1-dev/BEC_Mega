@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web AR Kampung Inggris Pare</title>
+
+    <!-- Model Viewer -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: #000;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100vh;
+
+            background: none;
+
+            transition: background-image 1s ease;
+        }
+
+        /* HEADER */
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(10px);
+
+            padding: 12px 24px;
+            border-radius: 20px;
+
+            color: white;
+            text-align: center;
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .title h1 {
+            font-size: 20px;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .title p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* AR BUTTON */
+        button {
+            background: linear-gradient(135deg,
+                    #2563eb,
+                    #4f46e5);
+
+            color: white;
+            border: none;
+
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: bold;
+
+            border-radius: 16px;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 25px rgba(37, 99, 235, 0.4);
+
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        /* CONTROL PANEL */
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            z-index: 10;
+
+            display: flex;
+            gap: 12px;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            color: white;
+
+            padding: 12px 18px;
+            border-radius: 14px;
+
+            cursor: pointer;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* LOADING */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            color: white;
+            z-index: 20;
+
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+
+        /* ROOM SELECTOR */
+        .room-selector {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            z-index: 10;
+
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            max-width: 90vw;
+        }
+
+        .room-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            color: white;
+
+            padding: 10px 16px;
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+            font-weight: 500;
+
+            transition: all 0.3s ease;
+        }
+
+        .room-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .room-btn.active {
+            background: linear-gradient(135deg,
+                    #2563eb,
+                    #4f46e5);
+
+            border-color: rgba(255, 255, 255, 0.3);
+
+            box-shadow:
+                0 5px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        /* DAY/NIGHT TOGGLE */
+        .day-night-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+
+            z-index: 10;
+        }
+
+        .toggle-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            color: white;
+
+            padding: 12px 20px;
+            border-radius: 14px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .toggle-btn.day {
+            background: linear-gradient(135deg,
+                    #f59e0b,
+                    #d97706);
+
+            box-shadow:
+                0 5px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .toggle-btn.night {
+            background: linear-gradient(135deg,
+                    #1e3a5f,
+                    #0f172a);
+
+            box-shadow:
+                0 5px 15px rgba(30, 58, 95, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TITLE -->
+    <div class="title">
+        <h1>KAMPUNG INGGRIS PARE</h1>
+        <p>Brilliant Is Home - Web AR Markerless</p>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loading" id="loadingText">
+        Loading AR...
+    </div>
+
+    <!-- MODEL VIEWER -->
+    <model-viewer id="arModel" src="model/bangunan3d.glb" alt="Gedung Kampung Inggris Pare" ar
+        ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate autoplay shadow-intensity="1.5"
+        shadow-softness="1" exposure="1.4" environment-image="neutral" camera-orbit="0deg 75deg 5m"
+        field-of-view="35deg" interaction-prompt="auto" loading="eager" scale="0.7 0.7 0.7" ar-placement="floor">
+
+        <!-- BUTTON AR -->
+        <button slot="ar-button">
+            🚀 Lihat dalam AR
+        </button>
+
+    </model-viewer>
+
+    <!-- ROOM SELECTOR -->
+    <div class="room-selector">
+        <button class="room-btn active" data-room="camp-reguler" onclick="switchRoom('camp-reguler')">
+            🏕️ Camp Reguler 🌙
+        </button>
+        <button class="room-btn" data-room="homestay-dalam" onclick="switchRoom('homestay-dalam')">
+            🏠 Homestay (Dalam) ☀️
+        </button>
+        <button class="room-btn" data-room="vip-dalam" onclick="switchRoom('vip-dalam')">
+            ⭐ VIP (Dalam) ☀️
+        </button>
+        <button class="room-btn" data-room="ruang-3" onclick="switchRoom('ruang-3')">
+            🚪 Ruangan 3 🌙
+        </button>
+        <button class="room-btn" data-room="luar-homestay" onclick="switchRoom('luar-homestay')">
+            🏠 Homestay (Luar) 🌙
+        </button>
+        <button class="room-btn" data-room="luar-vip-putra" onclick="switchRoom('luar-vip-putra')">
+            👦 VIP Putra (Luar) 🌙
+        </button>
+        <button class="room-btn" data-room="luar-vip-putri" onclick="switchRoom('luar-vip-putri')">
+            👧 VIP Putri (Luar) ☀️
+        </button>
+    </div>
+
+    <!-- DAY/NIGHT TOGGLE -->
+    <div class="day-night-toggle">
+        <button class="toggle-btn night" id="dayNightBtn" onclick="toggleDayNight()">
+            🌙 Malam
+        </button>
+    </div>
+
+    <!-- CONTROL -->
+    <div class="controls">
+
+        <button class="control-btn" onclick="resetCamera()">
+            Reset View
+        </button>
+
+        <button class="control-btn" onclick="toggleRotate()">
+            Auto Rotate
+        </button>
+
+    </div>
+
+    <script>
+
+        const viewer = document.getElementById('arModel');
+        const loading = document.getElementById('loadingText');
+        const dayNightBtn = document.getElementById('dayNightBtn');
+
+        // Room configurations with camera positions and lighting
+        const roomConfigs = {
+            'camp-reguler': {
+                cameraOrbit: "0deg 75deg 5m",
+                exposure: 0.8,
+                shadowIntensity: 0.5,
+                defaultTime: 'night',
+                bgDay: '../assets/foto360/Tampilan Camp Reguler.jpg',
+                bgNight: '../assets/foto360/Camp Reguler ( malam hari).png'
+            },
+            'homestay-dalam': {
+                cameraOrbit: "45deg 60deg 3m",
+                exposure: 1.2,
+                shadowIntensity: 1.0,
+                defaultTime: 'day',
+                bgDay: '../assets/foto360/Tampilan Dalam Homestay ( siang hari ).png',
+                bgNight: '../assets/foto360/Tampilan Dalam Homestay.jpg'
+            },
+            'vip-dalam': {
+                cameraOrbit: "90deg 45deg 2.5m",
+                exposure: 1.5,
+                shadowIntensity: 1.2,
+                defaultTime: 'day',
+                bgDay: '../assets/foto360/Tampilan Dalam VIP ( siang hari ).png',
+                bgNight: '../assets/foto360/Tampilan Dalam VIP.jpg'
+            },
+            'ruang-3': {
+                cameraOrbit: "0deg 75deg 5m",
+                exposure: 1.0,
+                shadowIntensity: 0.8,
+                defaultTime: 'night',
+                bgDay: '../assets/foto360/3 ( Siang Hari ).png',
+                bgNight: '../assets/foto360/3.jpg'
+            },
+            'luar-homestay': {
+                cameraOrbit: "180deg 70deg 6m",
+                exposure: 0.7,
+                shadowIntensity: 0.4,
+                defaultTime: 'night',
+                bgDay: '../assets/foto360/Tampilan Luar Homestay.jpg',
+                bgNight: '../assets/foto360/Tampilan Luar Homestay ( malam hari).png'
+            },
+            'luar-vip-putra': {
+                cameraOrbit: "270deg 65deg 5.5m",
+                exposure: 0.6,
+                shadowIntensity: 0.3,
+                defaultTime: 'night',
+                bgDay: '../assets/foto360/Tampilan Luar VIP Putra.jpg',
+                bgNight: '../assets/foto360/Tampilan Luar VIP Putra ( malam hari).png'
+            },
+            'luar-vip-putri': {
+                cameraOrbit: "135deg 70deg 6m",
+                exposure: 1.3,
+                shadowIntensity: 1.1,
+                defaultTime: 'day',
+                bgDay: '../assets/foto360/Tampilan Luar VIP Putri ( siang hari ).png',
+                bgNight: '../assets/foto360/Tampilan Luar VIP Putri.jpg'
+            }
+        };
+
+        let currentRoom = 'camp-reguler';
+        let isDay = false;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial state
+            isDay = false;
+            updateDayNightButton();
+            applyDayNightLighting();
+        });
+
+        // Loading selesai
+        viewer.addEventListener('load', () => {
+            loading.style.display = 'none';
+            // Initialize with default room
+            switchRoom('camp-reguler');
+        });
+
+        // Switch room function
+        function switchRoom(roomId) {
+            currentRoom = roomId;
+            const config = roomConfigs[roomId];
+
+            // Update active button
+            document.querySelectorAll('.room-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.room === roomId) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Apply room configuration
+            viewer.cameraOrbit = config.cameraOrbit;
+            viewer.exposure = config.exposure;
+            viewer.shadowIntensity = config.shadowIntensity;
+
+            // Set default time for this room
+            isDay = config.defaultTime === 'day';
+            updateDayNightButton();
+            applyDayNightLighting();
+        }
+
+        // Toggle day/night
+        function toggleDayNight() {
+            isDay = !isDay;
+            console.log('Toggling day/night. isDay:', isDay);
+            updateDayNightButton();
+            applyDayNightLighting();
+        }
+
+        // Update day/night button appearance
+        function updateDayNightButton() {
+            dayNightBtn.classList.remove('day', 'night');
+            if (isDay) {
+                dayNightBtn.classList.add('day');
+                dayNightBtn.textContent = '☀️ Siang';
+            } else {
+                dayNightBtn.classList.add('night');
+                dayNightBtn.textContent = '🌙 Malam';
+            }
+        }
+
+        // Apply day/night lighting with transition
+        function applyDayNightLighting() {
+            const config = roomConfigs[currentRoom];
+
+            console.log('Applying day/night lighting. isDay:', isDay, 'currentRoom:', currentRoom);
+
+            // Add transition effect to model-viewer
+            viewer.style.transition = 'background-image 1s ease';
+
+            if (isDay) {
+                // Day settings
+                viewer.setAttribute('exposure', (config.exposure * 1.5).toString());
+                viewer.setAttribute('shadow-intensity', (config.shadowIntensity * 1.5).toString());
+                viewer.style.backgroundImage = `url('${config.bgDay}')`;
+                viewer.style.background = 'none';
+                viewer.style.backgroundSize = 'cover';
+                viewer.style.backgroundPosition = 'center';
+
+                console.log('Day settings applied');
+            } else {
+                // Night settings
+                viewer.setAttribute('exposure', (config.exposure * 0.4).toString());
+                viewer.setAttribute('shadow-intensity', (config.shadowIntensity * 0.3).toString());
+                viewer.style.backgroundImage = `url('${config.bgNight}')`;
+                viewer.style.background = 'none';
+                viewer.style.backgroundSize = 'cover';
+                viewer.style.backgroundPosition = 'center';
+
+                console.log('Night settings applied');
+            }
+        }
+
+        // Reset kamera
+        function resetCamera() {
+            const config = roomConfigs[currentRoom];
+            viewer.cameraOrbit = config.cameraOrbit;
+        }
+
+        // Toggle auto rotate
+        function toggleRotate() {
+
+            if (viewer.autoRotate) {
+                viewer.autoRotate = false;
+            } else {
+                viewer.autoRotate = true;
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
