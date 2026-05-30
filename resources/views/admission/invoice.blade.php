@@ -8,9 +8,15 @@
         <a href="{{ route('dashboard') }}" class="btn-back">
             <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
         </a>
-        <button onclick="window.print()" class="btn-print">
-            <i class="fas fa-print"></i> Cetak Invoice
-        </button>
+        <div style="display:flex;gap:10px;">
+            <a href="{{ route('pos.invoice.pdf', $registration->id) }}"
+               class="btn-download-pdf">
+                <i class="fas fa-file-pdf"></i> Download PDF
+            </a>
+            <button onclick="window.print()" class="btn-print">
+                <i class="fas fa-print"></i> Cetak Invoice
+            </button>
+        </div>
     </div>
 
     <div class="invoice-card" id="printable-invoice">
@@ -123,6 +129,7 @@
     
     .btn-back { text-decoration: none; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 8px; }
     .btn-print { background: #4f46e5; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .btn-download-pdf { background: #dc2626; color: white; text-decoration: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
 
     .invoice-card { background: white; border-radius: 0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); padding: 60px; border: 1px solid #f1f5f9; position: relative; overflow: hidden; }
     

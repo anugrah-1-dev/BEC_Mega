@@ -8,8 +8,10 @@ use App\Models\Period;
 use App\Models\Transport;
 use App\Models\Registration;
 use App\Models\RegistrationComment;
+use App\Exports\LaporanExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminDashboardController extends Controller
 {
@@ -201,6 +203,32 @@ class AdminDashboardController extends Controller
         });
 
         return view('admin.laporan', compact('reportData', 'total_income', 'period'));
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $period = $request->get('period', 'monthly');
+        $query  = Registration::where('payment_status', 'paid')
+            ->with(['course', 'transport', 'user']);
+
+        if ($period == 'daily') {
+            $reportData = $query->whereDate('updated_at', today())->get();
+        } else {
+            $reportData = $query->whereMonth('updated_at', now()->month)
+                               ->whereYear('updated_at', now()->year)
+                               ->get();
+        }
+
+        $total_income = $reportData->sum(function ($reg) {
+            return ($reg->course->price ?? 0)
+                 + ($reg->transport->price ?? 0)
+                 + ($reg->course->admin_tax ?? 0);
+        });
+
+        $label    = $period === 'daily' ? 'harian' : 'bulanan';
+        $filename = 'laporan-' . $label . '-' . now()->format('Y-m-d') . '.xlsx';
+
+        return Excel::download(new LaporanExport($period, $reportData, $total_income), $filename);
     }
 
     public function siswa()

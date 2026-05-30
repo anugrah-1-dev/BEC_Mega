@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/pendaftaran-cepat', [AdmissionController::class, 'showDirectPOS'])->name('pos.direct');
     Route::post('/pendaftaran-cepat', [AdmissionController::class, 'processDirectPOS'])->name('pos.direct.process');
     Route::get('/invoice/{id}', [AdmissionController::class, 'showInvoice'])->name('pos.invoice');
+    Route::get('/invoice/{id}/download-pdf', [AdmissionController::class, 'downloadInvoicePDF'])->name('pos.invoice.pdf');
 
     // =======================
     // ADMIN
@@ -102,6 +103,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/pos', [AdminDashboardController::class, 'processPOS'])->name('pos.process');
 
             Route::get('/laporan', [AdminDashboardController::class, 'laporan'])->name('laporan');
+            Route::get('/laporan/export-excel', [AdminDashboardController::class, 'exportExcel'])->name('laporan.export_excel');
             Route::get('/siswa', [AdminDashboardController::class, 'siswa'])->name('siswa');
         });
 });

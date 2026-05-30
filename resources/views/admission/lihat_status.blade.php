@@ -117,7 +117,7 @@ background:
 @endif
 
 @if($registration->payment_proof)
-<img src="{{ asset('storage/'.$registration->payment_proof) }}"
+<img src="{{ asset($registration->payment_proof) }}"
 style="width:300px;border-radius:10px;margin-top:10px">
 @endif
 

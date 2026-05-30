@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Midtrans\Config;
 use Midtrans\Snap;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdmissionController extends Controller
 {
@@ -209,7 +210,10 @@ class AdmissionController extends Controller
         }
 
         if ($request->hasFile('payment_proof')) {
-            $path = $request->file('payment_proof')->store('payments', 'public');
+            $file = $request->file('payment_proof');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('payments'), $filename);
+            $path = 'payments/' . $filename;
 
             $registration->update([
                 'payment_proof' => $path,
@@ -508,6 +512,23 @@ class AdmissionController extends Controller
         }
 
         return view('admission.invoice', compact('registration'));
+    }
+
+    public function downloadInvoicePDF($id)
+    {
+        $registration = Registration::with(['user.studentDetail', 'course', 'period', 'transport'])->findOrFail($id);
+
+        // Security check
+        if (Auth::user()->role !== 'admin' && $registration->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $pdf = Pdf::loadView('admission.invoice_pdf', compact('registration'))
+            ->setPaper('a4', 'portrait');
+
+        $filename = 'invoice-' . $registration->invoice_number . '.pdf';
+
+        return $pdf->download($filename);
     }
 
     public function midtransCallback(Request $request)

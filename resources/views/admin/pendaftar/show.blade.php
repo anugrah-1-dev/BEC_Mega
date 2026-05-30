@@ -113,7 +113,7 @@
                 <div style="font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.07em; color:#64748b; margin-bottom:16px;">📸 Bukti Pembayaran</div>
                 @if($applicant->payment_proof)
                     <div style="border-radius:14px; overflow:hidden; border:1px solid #e2e8f0; max-height:280px;">
-                        <img src="{{ asset('storage/' . $applicant->payment_proof) }}"
+                        <img src="{{ asset($applicant->payment_proof) }}"
                              style="width:100%; object-fit:contain; background:#000; display:block; max-height:280px;"
                              alt="Bukti Pembayaran">
                     </div>

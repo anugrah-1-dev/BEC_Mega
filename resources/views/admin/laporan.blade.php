@@ -67,10 +67,17 @@
     <div class="card" style="padding: 0; overflow: hidden;">
         <div style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
             <h3 style="font-size: 1rem; font-weight: 800;">Rincian Transaksi Selesai</h3>
-            <button class="btn btn-outline btn-sm" onclick="window.print()">
-                <svg style="width:16px;height:16px" viewBox="0 0 24 24"><path fill="currentColor" d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z"/></svg>
-                Cetak Laporan
-            </button>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ route('admin.laporan.export_excel', ['period' => $period]) }}"
+                   style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#059669;color:white;border-radius:10px;font-size:0.875rem;font-weight:700;text-decoration:none;">
+                    <svg style="width:16px;height:16px" viewBox="0 0 24 24"><path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,19L8,15H10.5V12H13.5V15H16L12,19Z"/></svg>
+                    Download Excel
+                </a>
+                <button class="btn btn-outline btn-sm" onclick="window.print()">
+                    <svg style="width:16px;height:16px" viewBox="0 0 24 24"><path fill="currentColor" d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z"/></svg>
+                    Cetak Laporan
+                </button>
+            </div>
         </div>
         <div class="table-wrap">
             <table class="data-table">
